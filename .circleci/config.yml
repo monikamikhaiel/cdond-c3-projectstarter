@@ -111,7 +111,8 @@ jobs:
           name: front-end scan
           command: |
             cd frontend
-            npm audit 
+            npm install
+            npm audit fix --force
       - save_cache:
           paths: [frontend/node_modules]
           key: frontend-dependencies # ta2riban dah zay elcookie name 
@@ -127,7 +128,8 @@ jobs:
           name: Back-end scan
           command: |
             cd backend
-            npm audit # check for unsecure packages 
+            npm install # check for unsecure packages 
+            npm audit fix --force
       - save_cache:
           paths: [backend/node_modules]
           key: backend-dependencies

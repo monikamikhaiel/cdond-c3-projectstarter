@@ -75,7 +75,7 @@ jobs:
       - restore_cache: # cache --> hierarchy of files under a key. 
           keys: [frontend-dependencies] # from the previous job
       - run:
-          name: Build front-end
+          name: front-end test
           command: |
             cd frontend
             npm run test # same as npm test in order to run the scriptin package.json scripts 

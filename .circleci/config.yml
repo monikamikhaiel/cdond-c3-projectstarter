@@ -133,6 +133,22 @@ jobs:
       - save_cache:
           paths: [backend/node_modules]
           key: backend-dependencies
+  run-migration:        
+    docker:
+      - image: cimg/node:13.8.0
+    steps:
+      - checkout
+      - restore_cache:
+          keys: [backend-dependencies]
+      - run:
+          name: Back-end scan
+          command: |
+            cd backend
+            npm install 
+            npm run migrations
+      - save_cache:
+          paths: [backend/node_modules]
+          key: backend-dependencies
 
 #   deploy-infrastructure:
 #     docker:
@@ -313,6 +329,8 @@ workflows:
           requires: [build-backend]
       - scan-frontend:
           requires: [build-frontend]
+      - run-migration:
+          requires: [scan-backend]          
       # - deploy-infrastructure:
       #     requires: [test-frontend, test-backend, scan-frontend, scan-backend]
       #     filters:

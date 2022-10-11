@@ -141,9 +141,10 @@ jobs:
       - restore_cache:
           keys: [backend-dependencies]
       - run:
-          name: Back-end scan
+          name:  run-migration
           command: |
             cd backend
+            cat .env
             npm install 
             npm run migrations
       - save_cache:

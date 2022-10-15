@@ -17,27 +17,21 @@ commands:
                    sudo apt install software-properties-common
                    sudo add-apt-repository --yes --update ppa:ansible/ansible
                    sudo apt install ansible
-   destroy-environment:
-    description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
-    parameters:
-      workflow_ID:
-        type: String 
-        default: ${CIRCLE_WORKFLOW_ID:0:5}
-    steps:
-      - run:
-          name: Destroy environments
-          when: on_fail
-          command: |
-             aws cloudformation deploy \
-              --template-file .circleci/files/backend.yml \
-              --tags project=monika-infrastructure-deployment \
-               --stack-name "ApplicationInfrastructureFRONT${CIRCLE_WORKFLOW_ID:0:5}" \
-               --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:5}"  
-             aws cloudformation deploy \
-              --template-file .circleci/files/backend.yml \
-              --tags project=monika-infrastructure-deployment \
-               --stack-name "ApplicationInfrastructureBACK${CIRCLE_WORKFLOW_ID:0:5}}" \
-               --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:5}"    
+  #  destroy-environment:
+  #   description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
+  #   parameters:
+  #     workflow_ID:
+  #       type: String 
+  #       default: ${CIRCLE_WORKFLOW_ID:0:5}
+  #   steps:
+  #     - run:
+  #         name: Destroy environments
+  #         when: on_fail
+  #         command: |
+  #            aws cloudformation delete --stack-name "ApplicationInfrastructureFRONT${CIRCLE_WORKFLOW_ID:0:5}" \
+  #              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:5}"  
+  #            aws cloudformation delete --stack-name "ApplicationInfrastructureBACK${CIRCLE_WORKFLOW_ID:0:5}}" \
+  #              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:5}"    
 #             exit 1
 
   # revert-migrations:

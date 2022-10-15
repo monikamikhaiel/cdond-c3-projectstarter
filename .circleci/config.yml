@@ -28,9 +28,9 @@ commands:
           name: Destroy environments
           when: on_fail
           command: |
-             aws cloudformation delete --stack-name "ApplicationInfrastructureFRONT${CIRCLE_WORKFLOW_ID:0:5}" --parameter-overrides ID=parameters.workflow_ID 
+             aws cloudformation delete-stack --stack-name "ApplicationInfrastructureFRONT${CIRCLE_WORKFLOW_ID:0:5}" --parameter-overrides ID=parameters.workflow_ID 
              aws s3 rm s3://udapeople-kk1j287dhjppmz555 --recursive
-             aws cloudformation delete --stack-name "ApplicationInfrastructureBACK${CIRCLE_WORKFLOW_ID:0:5}}" --parameter-overrides ID=parameters.workflow_ID 
+             aws cloudformation delete-stack --stack-name "ApplicationInfrastructureBACK${CIRCLE_WORKFLOW_ID:0:5}}" --parameter-overrides ID=parameters.workflow_ID 
 #             exit 1
 
   # revert-migrations:
@@ -208,22 +208,28 @@ jobs:
       - destroy-environment      
       # Here's where you will add some code to rollback on failure      
 
-#   configure-infrastructure:
-#     docker:
-#       # Docker image here that supports Ansible
-#     steps:
-#       # Checkout code from git
-#       # Add ssh keys with fingerprint
-#       # attach workspace
-#       - run:
-#           name: Install dependencies
-#           command: |
-#             # Your code here
+  configure-infrastructure:
+    docker:
+      # Docker image here that supports Ansible
+      - image: cimg/base:stable
+    steps:
+      # Checkout code from git
+      - checkout
+      # Add ssh keys with fingerprint
+      
+      # attach workspace
+      - attach_workspace:
+          # Must be absolute path or relative path from working_directory
+          at: project/.circleci/ansible/inventory.txt
+      - run:
+          name: Install dependencies
+          command: |
+            # Your code here
 #             exit 1
-#       - run:
-#           name: Configure server
-#           command: |
-#             # Your code here
+      - run:
+          name: Configure server
+          command: |
+            # Your code here
 #             exit 1
 #       # Here's where you will add some code to rollback on failure      
 

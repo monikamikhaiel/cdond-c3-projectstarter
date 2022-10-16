@@ -216,7 +216,7 @@ jobs:
       - install-dependencies
       # Add ssh keys with fingerprint
       - add_ssh_keys:
-          fingerprints: ["6c:3a:ae:37:9f:d9:df:fa:07:9e:d2:71:0c:97:bf:ad"]
+          fingerprints: ["94:7e:13:5f:f4:88:35:4e:33:24:93:3b:f5:ae:57:9f"]
       # attach workspace
       - attach_workspace:
           # Must be absolute path or relative path from working_directory

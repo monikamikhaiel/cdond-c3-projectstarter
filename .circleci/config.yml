@@ -227,8 +227,11 @@ jobs:
       - run:
           name: Configure server
           command: |
+               find / -name "inventory.txt"
                ansible-playbook -i .circleci/ansible/inventory.txt \
-                .circleci/ansible/configure-server.yml           
+                .circleci/ansible/configure-server.yml 
+               cat .circleci/ansible/inventory.txt
+           
       - run:
           name: Install dependencies
           command: |

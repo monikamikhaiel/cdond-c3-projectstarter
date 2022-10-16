@@ -16,7 +16,7 @@ commands:
                    sudo apt update
                    sudo apt install software-properties-common
                    sudo add-apt-repository --yes --update ppa:ansible/ansible
-                   sudo apt install ansible
+                   sudo apt install ansible --yes
    install-nodejs-npm:
         description: Install nodejs and npm from nodesource 
         steps:
@@ -280,43 +280,54 @@ jobs:
       - destroy-environment   
       - revert-migrations
 
-#   deploy-frontend:
+  deploy-frontend:
+    docker:
+      # Docker image here that supports AWS CLI
+      - image: cimg/base:stable
+    steps:
+      # Checkout code from git
+      - checkout
+      - install-dependencies
+      - install-nodejs-npm
+      - run:
+          name: Install dependencies
+          command: |
+           cd frontend
+           npm i       
+      - run:
+          name: Get backend url
+          command: |
+            # your code here
+            BACKEND_IP=$(aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --output text)
+            # echo "Backend EC2 IP is ${BACKEND_IP}"
+            export API_URL="http://${BACKEND_IP}:3030"
+            echo "${API_URL}"
+      - run:
+          name: Deploy frontend objects
+          command: |
+            # your code here
+             cd frontend
+             npm run build 
+            #   need to copy the files in dist to the s3 bucket
+            aws s3 dist cp s3://udapeople-kk1j287dhjppmz55 --recursive
+      # Here's where you will add some code to rollback on failure      
+                    
+#   deploy-backend:
 #     docker:
-#       # Docker image here that supports AWS CLI
+#       # Docker image here that supports Ansible
 #     steps:
 #       # Checkout code from git
+#       # Add ssh keys with fingerprint
+#       # attach workspace
 #       - run:
 #           name: Install dependencies
 #           command: |
 #             # your code here
 #       - run:
-#           name: Get backend url
+#           name: Deploy backend
 #           command: |
 #             # your code here
-#             export API_URL="http://${BACKEND_IP}:3030"
-#             echo "${API_URL}"
-#       - run:
-#           name: Deploy frontend objects
-#           command: |
-#             # your code here
-#       # Here's where you will add some code to rollback on failure      
-                    
-# #   deploy-backend:
-# #     docker:
-# #       # Docker image here that supports Ansible
-# #     steps:
-# #       # Checkout code from git
-# #       # Add ssh keys with fingerprint
-# #       # attach workspace
-# #       - run:
-# #           name: Install dependencies
-# #           command: |
-# #             # your code here
-# #       - run:
-# #           name: Deploy backend
-# #           command: |
-# #             # your code here
-# #       # Here's where you will add some code to rollback on failure  
+#       # Here's where you will add some code to rollback on failure  
 
 #   smoke-test:
 #     docker:

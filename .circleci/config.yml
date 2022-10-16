@@ -31,14 +31,11 @@ commands:
              aws cloudformation delete-stack --stack-name "ApplicationInfrastructureFRONT${CIRCLE_WORKFLOW_ID:0:5}"  
              aws cloudformation delete-stack --stack-name "ApplicationInfrastructureBACK${CIRCLE_WORKFLOW_ID:0:5}"
              aws s3 rm s3://udapeople-kk1j287dhjppmz55 --recursive
-
-#             exit 1
-
-  revert-migrations:
-    description: Revert the last migration if successfully run in the current workflow.
-    parameters:
+   revert-migrations:
+      description: Revert the last migration if successfully run in the current workflow.
+      # parameters:
       # Add parameter here     
-    steps:
+      steps:
       - run:
           name: Revert migrations
           # Add when this will run

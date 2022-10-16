@@ -34,24 +34,24 @@ commands:
 
 #             exit 1
 
-  # revert-migrations:
-  #   description: Revert the last migration if successfully run in the current workflow.
-  #   parameters:
-  #     # Add parameter here     
-  #   steps:
-  #     - run:
-  #         name: Revert migrations
-  #         # Add when this will run
-  #         command: |
-  #           # Curl command here to see if there was a successful migration associated with the workflow id, store result in SUCCESS variable
-  #           SUCCESS = 1
-  #           if(( $SUCCESS==1 )); 
-  #           then
-  #           #  cd ~/project/backend
-  #           #  npm install
-  #           #  Add revert code here. You can find this in the Getting Started section.
-  #             exit 1
-  #           fi
+  revert-migrations:
+    description: Revert the last migration if successfully run in the current workflow.
+    parameters:
+      # Add parameter here     
+    steps:
+      - run:
+          name: Revert migrations
+          # Add when this will run
+          command: |
+            # Curl command here to see if there was a successful migration associated with the workflow id, store result in SUCCESS variable
+            SUCCESS = 1
+            if(( $SUCCESS==1 )); 
+            then
+             cd ~/project/backend
+             npm install
+            #  Add revert code here. You can find this in the Getting Started section.
+              # exit 1
+            fi
             
 jobs:
   build-frontend:
@@ -219,8 +219,7 @@ jobs:
       - install-dependencies
       # Add ssh keys with fingerprint
       - add_ssh_keys:
-          fingerprints:
-            - "6c:3a:ae:37:9f:d9:df:fa:07:9e:d2:71:0c:97:bf:ad"   
+          fingerprints: ["6c:3a:ae:37:9f:d9:df:fa:07:9e:d2:71:0c:97:bf:ad"]
       # attach workspace
       - attach_workspace:
           # Must be absolute path or relative path from working_directory
@@ -229,18 +228,16 @@ jobs:
           name: Configure server
           command: |
                cat .circleci/ansible/inventory.txt
-               ansible-playbook -i .circleci/ansible/inventory.txt \
-                .circleci/ansible/configure-server.yml 
+               ansible-playbook -i .circleci/ansible/inventory.txt  .circleci/ansible/configure-server.yml 
            
       - run:
           name: Install dependencies
           command: |
             cat .circleci/ansible/inventory.txt
-            ansible-playbook -i .circleci/ansible/inventory.txt \
-                .circleci/ansible/deploy-backend.yml 
+            ansible-playbook -i .circleci/ansible/inventory.txt .circleci/ansible/deploy-backend.yml 
 #             exit 1
 
-      - destroy-environment      
+      # - destroy-environment      
 
 #             exit 1
 #       # Here's where you will add some code to rollback on failure      
@@ -250,6 +247,7 @@ jobs:
       - image: cimg/node:13.8.0
     steps:
       - checkout
+      - install-dependencies
       - restore_cache:
           keys: [backend-dependencies]
       - run:
@@ -261,12 +259,14 @@ jobs:
       - save_cache:
           paths: [backend/node_modules]
           key: backend-dependencies
-#       - run:
-#           name: Send migration results to memstash
-#           command: |
-#             # Your code here
+      - run:
+          name: Send migration results to memstash
+          command: |
+            # Your code here
 #             exit 1
-#      # Here's where you will add some code to rollback on failure      
+#      # Here's where you will add some code to rollback on failure   
+      - destroy-environment   
+      - revert-migrations
 
 #   deploy-frontend:
 #     docker:

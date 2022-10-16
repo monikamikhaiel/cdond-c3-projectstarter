@@ -228,13 +228,13 @@ jobs:
           name: Install dependencies
           command: |
             ansible-playbook -i project/.circleci/ansible/inventory.txt\
-                ansible/deploy-backend.yml 
+                project/.circleci/ansible/deploy-backend.yml 
 #             exit 1
       - run:
           name: Configure server
           command: |
                ansible-playbook -i project/.circleci/ansible/inventory.txt\
-                ansible/configure-server.yml 
+                project/.circleci/ansible/configure-server.yml 
       - destroy-environment      
 
 #             exit 1

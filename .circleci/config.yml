@@ -29,8 +29,9 @@ commands:
           when: on_fail
           command: |
              aws cloudformation delete-stack --stack-name "ApplicationInfrastructureFRONT${CIRCLE_WORKFLOW_ID:0:5}"  
-             aws s3 rm s3://udapeople-kk1j287dhjppmz555 --recursive
              aws cloudformation delete-stack --stack-name "ApplicationInfrastructureBACK${CIRCLE_WORKFLOW_ID:0:5}}"
+             aws s3 rm s3://udapeople-kk1j287dhjppmz55 --recursive
+
 #             exit 1
 
   # revert-migrations:
@@ -153,22 +154,22 @@ jobs:
       - save_cache:
           paths: [backend/node_modules]
           key: backend-dependencies
-  run-migration:        
-    docker:
-      - image: cimg/node:13.8.0
-    steps:
-      - checkout
-      - restore_cache:
-          keys: [backend-dependencies]
-      - run:
-          name:  run-migration
-          command: |
-            cd backend
-            npm install 
-            npm run migrations
-      - save_cache:
-          paths: [backend/node_modules]
-          key: backend-dependencies
+  # run-migration:        
+  #   docker:
+  #     - image: cimg/node:13.8.0
+  #   steps:
+  #     - checkout
+  #     - restore_cache:
+  #         keys: [backend-dependencies]
+  #     - run:
+  #         name:  run-migration
+  #         command: |
+  #           cd backend
+  #           npm install 
+  #           npm run migrations
+  #     - save_cache:
+  #         paths: [backend/node_modules]
+  #         key: backend-dependencies
 
   deploy-infrastructure:
     docker:
@@ -365,8 +366,8 @@ workflows:
           requires: [build-backend]
       - scan-frontend:
           requires: [build-frontend]
-      - run-migration:
-          requires: [scan-backend]          
+      # - run-migration:
+      #     requires: [scan-backend]          
       - deploy-infrastructure:
           requires: [test-frontend, test-backend, scan-frontend, scan-backend]
           # filters:

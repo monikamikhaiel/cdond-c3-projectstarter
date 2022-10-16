@@ -223,7 +223,7 @@ jobs:
       # attach workspace
       - attach_workspace:
           # Must be absolute path or relative path from working_directory
-          at: project/.circleci/ansible/inventory.txt
+          at: .circleci/ansible/inventory.txt
       - run:
           name: Configure server
           command: |

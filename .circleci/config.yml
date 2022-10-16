@@ -33,21 +33,24 @@ commands:
              aws s3 rm s3://udapeople-kk1j287dhjppmz55 --recursive
    revert-migrations:
       description: Revert the last migration if successfully run in the current workflow.
-      # parameters:
-      # Add parameter here     
+      parameters:
+        workflow_ID:
+          type: string 
+          default: ${CIRCLE_WORKFLOW_ID:0:5} 
       steps:
       - run:
           name: Revert migrations
           # Add when this will run
           command: |
             # Curl command here to see if there was a successful migration associated with the workflow id, store result in SUCCESS variable
+            result=$(curl -k  https://kvdb.io/K33QBbPMsWuLqHyKSuNPRx/migration_result_<<parameters.workflow_ID
 
-            SUCCESS = 1
-            if(( $SUCCESS==1 )); 
+            SUCCESS = "sucess"
+            if(( $SUCCESS!=$result )); 
             then
              cd ~/project/backend
              npm install
-             
+             npm install migration:revert
             #  Add revert code here. You can find this in the Getting Started section.
               # exit 1
             fi
@@ -235,7 +238,7 @@ jobs:
             ansible-playbook -i .circleci/ansible/inventory.txt .circleci/ansible/deploy-backend.yml 
 #             exit 1
 
-      # - destroy-environment      
+      - destroy-environment      
 
 #             exit 1
 #       # Here's where you will add some code to rollback on failure      
@@ -387,8 +390,8 @@ workflows:
           #     only: [test-feature-branch]
       - configure-infrastructure:
           requires: [deploy-infrastructure]
-      # - run-migrations:
-      #     requires: [configure-infrastructure]
+      - run-migrations:
+          requires: [configure-infrastructure]
       # - deploy-frontend:
       #     requires: [run-migrations]
       # - deploy-backend:

@@ -227,6 +227,7 @@ jobs:
       - run:
           name: Install dependencies
           command: |
+            cat project/.circleci/ansible/inventory.txt
             ansible-playbook -i project/.circleci/ansible/inventory.txt \
                 .circleci/ansible/deploy-backend.yml 
 #             exit 1

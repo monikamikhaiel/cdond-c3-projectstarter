@@ -200,6 +200,7 @@ jobs:
           command: |
                     BACKEND_PUBLIC_IP=$(aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --output text)
                     echo $BACKEND_PUBLIC_IP >> .circleci/ansible/inventory.txt
+                    cat .circleci/ansible/inventory.txt
 
       - persist_to_workspace:
           root: ~/
@@ -223,7 +224,7 @@ jobs:
       # attach workspace
       - attach_workspace:
           # Must be absolute path or relative path from working_directory
-          at: .circleci/ansible/inventory.txt
+          at: ~/
       - run:
           name: Configure server
           command: |
@@ -244,16 +245,22 @@ jobs:
 #             exit 1
 #       # Here's where you will add some code to rollback on failure      
 
-#   run-migrations:
-#     docker:
-#       # Docker image here that supports NodeJS
-#     steps:
-#       # Checkout code from git
-#       - run:
-#           name: Run migrations
-#           command: |
-#             # Your code here
-#             exit 1
+  run-migrations:
+    docker:
+      - image: cimg/node:13.8.0
+    steps:
+      - checkout
+      - restore_cache:
+          keys: [backend-dependencies]
+      - run:
+          name:  run-migration
+          command: |
+            cd backend
+            npm install 
+            npm run migrations
+      - save_cache:
+          paths: [backend/node_modules]
+          key: backend-dependencies
 #       - run:
 #           name: Send migration results to memstash
 #           command: |
@@ -339,7 +346,7 @@ jobs:
 
 # # cleanup:
 # #     docker:
-# #       # Docker image here
+# #             - image: cimg/node:13.8.0
 # #     steps:
 # #       # Checkout code from git
 # #       - run:

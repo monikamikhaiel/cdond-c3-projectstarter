@@ -51,7 +51,7 @@ commands:
           # Add when this will run
           command: |
             # Curl command here to see if there was a successful migration associated with the workflow id, store result in SUCCESS variable
-            result=$(curl -k  https://kvdb.io/K33QBbPMsWuLqHyKSuNPRx/migration_result_<<parameters.workflow_ID)
+            result=$(curl -k  https://kvdb.io/K33QBbPMsWuLqHyKSuNPRx/migration_result_${CIRCLE_WORKFLOW_ID:0:5})
 
             SUCCESS = "sucess"
             if(( $SUCCESS!=$result )); 

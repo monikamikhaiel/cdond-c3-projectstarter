@@ -256,7 +256,6 @@ jobs:
       - image: cimg/node:13.8.0
     steps:
       - checkout
-      - install-dependencies
       - restore_cache:
           keys: [backend-dependencies]
       - run:
@@ -274,9 +273,13 @@ jobs:
                     if grep -q "has been executed successfully" ~/project/backend/migrations.log 
                     then 
                         curl https://kvdb.io/K33QBbPMsWuLqHyKSuNPRx/migration_result_${CIRCLE_WORKFLOW_ID:0:5} -d 'success'
-                    fi    
+                    fi 
+                       
 #             exit 1
-#      # Here's where you will add some code to rollback on failure   
+#      # Here's where you will add some code to rollback on failure 
+                    curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+                    unzip awscliv2.zip
+                    sudo ./aws/install  
       - destroy-environment   
       - revert-migrations
 

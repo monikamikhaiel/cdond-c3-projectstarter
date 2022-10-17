@@ -274,12 +274,12 @@ jobs:
                     then 
                         curl https://kvdb.io/K33QBbPMsWuLqHyKSuNPRx/migration_result_${CIRCLE_WORKFLOW_ID:0:5} -d 'success'
                     fi 
-                       
-#             exit 1
-#      # Here's where you will add some code to rollback on failure 
                     curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
                     unzip awscliv2.zip
-                    sudo ./aws/install  
+                    sudo ./aws/install    
+#             exit 1
+#      # Here's where you will add some code to rollback on failure 
+ 
       - destroy-environment   
       - revert-migrations
 

@@ -16,7 +16,7 @@ commands:
                    sudo apt update
                    sudo apt install software-properties-common
                    sudo add-apt-repository --yes --update ppa:ansible/ansible
-                   sudo apt install ansible --yes
+                   sudo apt install ansible --yes <<Y
    install-nodejs-npm:
         description: Install nodejs and npm from nodesource 
         steps:
@@ -283,7 +283,8 @@ jobs:
   deploy-frontend:
     docker:
       # Docker image here that supports AWS CLI
-      - image: cimg/base:stable
+     - image: cimg/base:stable
+
     steps:
       # Checkout code from git
       - checkout
@@ -312,79 +313,92 @@ jobs:
             aws s3 dist cp s3://udapeople-kk1j287dhjppmz55 --recursive
       # Here's where you will add some code to rollback on failure      
                     
-#   deploy-backend:
-#     docker:
-#       # Docker image here that supports Ansible
-#     steps:
-#       # Checkout code from git
-#       # Add ssh keys with fingerprint
-#       # attach workspace
-#       - run:
-#           name: Install dependencies
-#           command: |
-#             # your code here
-#       - run:
-#           name: Deploy backend
-#           command: |
-#             # your code here
-#       # Here's where you will add some code to rollback on failure  
+  deploy-backend:
+    docker:
+      # Docker image here that supports AWS CLI
+      - image: cimg/base:stable
+    steps:
+      # Checkout code from git
+      - checkout
+      - install-dependencies
+      - install-nodejs-npm
+      - run:
+          name: Install dependencies
+          command: |
+            # your code here
+      - run:
+          name: Deploy backend
+          command: |
+             cd backend
+             npm run build 
+      # Here's where you will add some code to rollback on failure  
 
-#   smoke-test:
-#     docker:
-#       # Lightweight Docker image 
-#     steps:
-#       # Checkout code from git
-#       - run:
-#           name: Install dependencies
-#           command: |
-#             # your code here
-#       - run:
-#           name: Get backend url
-#           command: |
-#             # your code here
-#       - run:
-#           name: Backend smoke test.
-#           command: |
-#             # your code here
-#       - run:
-#           name: Frontend smoke test.
-#           command: |
-#             # your code here
-#       # Here's where you will add some code to rollback on failure  
+  smoke-test:
+    docker:
+      # Lightweight Docker image 
+    - image: cimg/base:stable
+    steps:
+      # Checkout code from git
+      - checkout
+      - install-dependencies
+      - install-nodejs-npm
+      - run:
+          name: Install dependencies
+          command: |
+            # your code here
+      - run:
+          name: Get backend url
+          command: |
+            # your code here
+      - run:
+          name: Backend smoke test.
+          command: |
+            # your code here
+      - run:
+          name: Frontend smoke test.
+          command: |
+            # your code here
+      # Here's where you will add some code to rollback on failure  
 
-# #   cloudfront-update:
-# #     docker:
-# #       # Docker image here that supports AWS CLI
-# #     steps:
-# #       # Checkout code from git
-# #       - run:
-# #           name: Install dependencies
-# #           command: |
-# #             # your code here
-# #       - run:
-# #           name: Update cloudfront distribution
-# #           command: |
-# #             # your code here
-# #       # Here's where you will add some code to rollback on failure  
+  cloudfront-update:
+    docker:
+      # Docker image here that supports AWS CLI
+    - image: cimg/base:stable
+    steps:
+      # Checkout code from git
+      - checkout
+      - install-dependencies
+      - install-nodejs-npm
+      - run:
+          name: Install dependencies
+          command: |
+            # your code here
+      - run:
+          name: Update cloudfront distribution
+          command: |
+            # your code here
+      # Here's where you will add some code to rollback on failure  
 
-# # cleanup:
-# #     docker:
-# #             - image: cimg/node:13.8.0
-# #     steps:
-# #       # Checkout code from git
-# #       - run:
-# #           name: Get old stack workflow id
-# #           command: |
-# #             # your code here
-# #             export OldWorkflowID="the id here"
-# #             export STACKS=[] #put the list of stacks here
-# #       - run:
-# #           name: Remove old stacks and files
-# #           command: |
-# #             if [[ "${STACKS[@]}" =~ "${OldWorkflowID}" ]]
-# #             then
-# #               # your code here
-# #             fi
+cleanup:
+    docker:
+    - image: cimg/node:13.8.0
+    steps:
+      # Checkout code from git
+      - checkout
+      - install-dependencies      
+      - run:
+          name: Get old stack workflow id
+          command: |
+            # your code here
+            export OldWorkflowID="the id here"
+            export STACKS=[] #put the list of stacks here
+      - run:
+          name: Remove old stacks and files
+          command: |
+            if [[ "${STACKS[@]}" =~ "${OldWorkflowID}" ]]
+            then
+              # your code here
+            fi
             
 
 workflows:

@@ -342,7 +342,7 @@ jobs:
           command: |
              cd backend
             #  npm i  modules already installed
-            tar cf - dist/* package* > .circleci/ansible/roles/deploy/files/dependencies.tar
+             tar cf - dist/* package* > .circleci/ansible/roles/deploy/files/dependencies.tar
             # cp dependencies.tar .circleci/ansible/roles/deploy/files  # add the packages to files ansible 
       - run:
           name: Deploy backend

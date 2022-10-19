@@ -343,8 +343,8 @@ jobs:
           command: |
                     cd backend
                     npm run build # dal eli beyproduce el dist folder 
-                    tar cf .circleci/ansible/roles/deploy/files/dependencies.tar  dist/* package*  
-            # cp dependencies.tar .circleci/ansible/roles/deploy/files  # add the packages to files ansible 
+                    tar cf dependencies.tar  dist/* package*  
+                    cp dependencies.tar .circleci/ansible/roles/deploy/files  # add the packages to files ansible 
       - run:
           name: Deploy backend
           command: |
@@ -381,6 +381,10 @@ jobs:
           command: |
             # your code here
             curl $API_URL
+      - run:
+          name: deploy cloudfront 
+          command: |
+            # your code here            
       - run:
           name: Frontend smoke test.
           command: |

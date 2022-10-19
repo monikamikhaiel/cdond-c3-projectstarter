@@ -246,7 +246,6 @@ jobs:
             cat .circleci/ansible/inventory.txt
             ansible-playbook -i .circleci/ansible/inventory.txt .circleci/ansible/deploy-backend.yml 
 #             exit 1
-
       - destroy-environment      
 
 #             exit 1
@@ -317,8 +316,10 @@ jobs:
              cd frontend
              npm run build 
             #   need to copy the files in dist to the s3 bucket
-            aws s3 dist cp s3://udapeople-kk1j287dhjppmz55 --recursive
-      # Here's where you will add some code to rollback on failure      
+            aws s3 cp dist  s3://udapeople-kk1j287dhjppmz55 --recursive
+      # Here's where you will add some code to rollback on failure 
+      - destroy-environment   
+      - revert-migrations     
                     
   deploy-backend:
     docker:
@@ -342,7 +343,7 @@ jobs:
           command: |
                     cd backend
                     npm run build # dal eli beyproduce el dist folder 
-                    tar cf - dist/* package* > .circleci/ansible/roles/deploy/files/dependencies.tar
+                    tar cf .circleci/ansible/roles/deploy/files/dependencies.tar  dist/* package*  
             # cp dependencies.tar .circleci/ansible/roles/deploy/files  # add the packages to files ansible 
       - run:
           name: Deploy backend
@@ -351,7 +352,9 @@ jobs:
                       npm run build 
                       ansible-playbook -i .circleci/ansible/inventory.txt .circleci/ansible/deploy-backend.yml 
 
-      # Here's where you will add some code to rollback on failure  
+      # Here's where you will add some code to rollback on failure 
+      - destroy-environment   
+      - revert-migrations 
 
   smoke-test:
     docker:
@@ -370,15 +373,21 @@ jobs:
           name: Get backend url
           command: |
             # your code here
+            BACKEND_IP=$(aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --output text)
+            # echo "Backend EC2 IP is ${BACKEND_IP}"
+            export API_URL="http://${BACKEND_IP}:3030"
       - run:
           name: Backend smoke test.
           command: |
             # your code here
+            curl $API_URL
       - run:
           name: Frontend smoke test.
           command: |
             # your code here
-      # Here's where you will add some code to rollback on failure  
+      # Here's where you will add some code to rollback on failure 
+      - destroy-environment   
+      - revert-migrations 
 
   cloudfront-update:
     docker:

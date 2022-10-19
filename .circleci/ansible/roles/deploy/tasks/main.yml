@@ -1,2 +1,52 @@
 # add the code 
 #  cd and npm run 
+# install nodejs and npm 
+# - name: "Add nodejs apt key"
+#   apt_key:
+#     url: https://deb.nodesource.com/gpgkey/nodesource.gpg.key
+#     state: present
+
+# - name: "Add nodejs 13.x ppa for apt repo"
+#   apt_repository:
+#     repo: deb https://deb.nodesource.com/node_13.x bionic main
+#     update_cache: yes
+
+- name: "untar the dependencies"
+  unarchive:
+    src: dependencies.tar
+    dest: /home/ubuntu/
+- name: "download nodejs 13.8"
+  become: true
+  shell: |
+         curl -fsSL https://deb.nodesource.com/setup_13.x | sudo -E bash -
+
+- name: "Install nodejs"
+  apt:
+    update_cache: yes
+    name: nodejs
+    state: present
+
+#  install dependencies 
+- name: "install dependencies"
+  ansible.builtin.command: npm 
+  args:
+    chdir: /home/ubuntu/
+# install pm2 
+- name: "Install NPM-distributed command-line tools"
+  npm:
+    global: yes
+    name: "pm2"
+# run it with pm2   
+# install pm2 
+- name: "run code"
+  ansible.builtin.command: pm2 stop default && pm2 start main.js
+  args:
+    chdir: /home/ubuntu/dist
+  register: pm2_logs
+- name: copy the output to a local file
+  copy:
+    content: "{{ pm2_logs.stdout }}"
+    dest: "/tmp/hello.txt"
+  delegate_to: localhost    
+
+

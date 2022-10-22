@@ -229,7 +229,7 @@ jobs:
       - install-dependencies
       # Add ssh keys with fingerprint
       - add_ssh_keys:
-          fingerprints: ["ea:49:89:e6:c1:92:83:80:bc:12:1c:b8:5d:35:7f:68"]
+          fingerprints: ["7e:65:67:ce:9c:f0:65:ed:37:65:3a:d4:40:14:94:eb"]
       # attach workspace
       - attach_workspace:
           # Must be absolute path or relative path from working_directory
@@ -331,7 +331,7 @@ jobs:
       - install-dependencies
       - install-nodejs-npm
       - add_ssh_keys:
-          fingerprints: ["ea:49:89:e6:c1:92:83:80:bc:12:1c:b8:5d:35:7f:68"]
+          fingerprints: ["7e:65:67:ce:9c:f0:65:ed:37:65:3a:d4:40:14:94:eb"]
       # attach workspace
       - attach_workspace:
           # Must be absolute path or relative path from working_directory

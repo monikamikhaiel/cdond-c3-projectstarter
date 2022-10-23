@@ -345,8 +345,9 @@ jobs:
                     cd backend
                     npm run build # dal eli beyproduce el dist folder 
                     tar cf dependencies.tar  dist/* package*  
+                    pwd
                     cd ..
-                    cp dependencies.tar .circleci/ansible/roles/deploy/files/dependencies.tar  # add the packages to files ansible 
+                    cp backend/dependencies.tar .circleci/ansible/roles/deploy/files/dependencies.tar  # add the packages to files ansible 
       - run:
           name: Deploy backend
           command: |

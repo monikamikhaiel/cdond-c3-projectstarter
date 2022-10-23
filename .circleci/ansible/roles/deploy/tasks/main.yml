@@ -41,7 +41,7 @@
 - name: "run code"
   ansible.builtin.command: pm2 stop default && pm2 start main.js
   args:
-    chdir: /home/ubuntu/dist
+    chdir: /home/ubuntu/
   register: pm2_logs
 - name: copy the output to a local file
   copy:

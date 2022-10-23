@@ -11,7 +11,8 @@
 - name: "download nodejs 13.8"
   become: true
   shell: |
-         curl -fsSL https://deb.nodesource.com/setup_13.x | sudo -E bash - > out.out || exit 0 && exit 0 
+         curl -fsSL https://deb.nodesource.com/setup_13.x | sudo -E bash 
+        #  - > out.out || exit 0 && exit 0 
 
 - name: "Install nodejs"
   apt:

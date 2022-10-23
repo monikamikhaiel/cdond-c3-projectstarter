@@ -344,6 +344,8 @@ jobs:
           command: |
                     cd backend
                     npm run build # dal eli beyproduce el dist folder 
+                    ls dist/*
+                    ls package*
                     tar cf dependencies.tar  dist/* package*  
                     pwd
                     cd ..
@@ -358,7 +360,7 @@ jobs:
 
       # Here's where you will add some code to rollback on failure 
       - destroy-environment   
-      - revert-migrations 
+      # - revert-migrations 
 
   smoke-test:
     docker:

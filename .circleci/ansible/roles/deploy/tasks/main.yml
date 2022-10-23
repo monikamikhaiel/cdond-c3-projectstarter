@@ -39,7 +39,7 @@
 # run it with pm2   
 # install pm2 
 - name: "run code"
-  ansible.builtin.command: pm2 start /home/ubuntu/dist/main.js && pm2 save
+  ansible.builtin.command: cd /home/ubuntu/ && pm2 start dist/main.js
   # args:
   #   chdir: /home/ubuntu/dist
   register: pm2_logs

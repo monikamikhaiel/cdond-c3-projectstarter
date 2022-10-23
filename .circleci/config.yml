@@ -443,14 +443,20 @@ cleanup:
           name: Get old stack workflow id
           command: |
             # your code here
-            export OldWorkflowID="the id here"
+            export OldWorkflowID="aws cloudformation list-exports \
+             --query "Exports[?Name==\`WorkflowID`\].Value" --no-paginate --output text"
+            echo "Value of old workflowID $OldWorkflowID" 
             export STACKS=[] #put the list of stacks here
       - run:
           name: Remove old stacks and files
           command: |
             if [[ "${STACKS[@]}" =~ "${OldWorkflowID}" ]]
             then
-              # your code here
+            # same commands as the cmd -->    destroy-environment:
+             aws cloudformation delete-stack --stack-name "ApplicationInfrastructureFRONT${OldWorkflowID}"  
+             aws cloudformation delete-stack --stack-name "ApplicationInfrastructureBACK${OldWorkflowID}"
+             aws s3 rm s3://udapeople-kk1j287dhjppmz55 --recursive
+             exit 1
             fi
             
 

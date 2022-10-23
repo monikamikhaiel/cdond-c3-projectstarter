@@ -36,9 +36,10 @@ commands:
           name: Destroy environments
           when: on_fail
           command: |
-             aws cloudformation delete-stack --stack-name "ApplicationInfrastructureFRONT${CIRCLE_WORKFLOW_ID:0:5}"  
              aws cloudformation delete-stack --stack-name "ApplicationInfrastructureBACK${CIRCLE_WORKFLOW_ID:0:5}"
-             aws s3 rm s3://udapeople-kk1j287dhjppmz55 --recursive
+             aws s3 rm s3://udapeople-${CIRCLE_WORKFLOW_ID:0:5} --recursive
+             aws cloudformation delete-stack --stack-name "ApplicationInfrastructureFRONT${CIRCLE_WORKFLOW_ID:0:5}"  
+
    revert-migrations:
       description: Revert the last migration if successfully run in the current workflow.
       parameters:
@@ -316,7 +317,7 @@ jobs:
              cd frontend
              npm run build 
             #   need to copy the files in dist to the s3 bucket
-            aws s3 cp dist  s3://udapeople-kk1j287dhjppmz55 --recursive
+            aws s3 cp dist  s3://udapeople-${CIRCLE_WORKFLOW_ID:0:5} --recursive
       # Here's where you will add some code to rollback on failure 
       - destroy-environment   
       - revert-migrations     
@@ -401,7 +402,7 @@ jobs:
           name: Frontend smoke test.
           command: |
             # your code here
-            Frontend_url=http://udapeople-kk1j287dhjppmz55.s3-website.us-west-1.amazonaws.com
+            Frontend_url=http://udapeople-${CIRCLE_WORKFLOW_ID:0:5}.s3-website.us-west-1.amazonaws.com
             if curl -s $Frontend_url | grep "Welcome"
             then 
                exit 0
@@ -453,10 +454,9 @@ cleanup:
             if [[ "${STACKS[@]}" =~ "${OldWorkflowID}" ]]
             then
             # same commands as the cmd -->    destroy-environment:
-             aws cloudformation delete-stack --stack-name "ApplicationInfrastructureFRONT${OldWorkflowID}"  
              aws cloudformation delete-stack --stack-name "ApplicationInfrastructureBACK${OldWorkflowID}"
-             aws s3 rm s3://udapeople-kk1j287dhjppmz55 --recursive
-             exit 1
+             aws s3 rm s3://udapeople-${OldWorkflowID} --recursive
+             aws cloudformation delete-stack --stack-name "ApplicationInfrastructureFRONT${OldWorkflowID}"  
             fi
             
 

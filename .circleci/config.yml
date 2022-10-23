@@ -359,8 +359,8 @@ jobs:
                       ansible-playbook -i .circleci/ansible/inventory.txt .circleci/ansible/deploy-backend.yml 
 
       # Here's where you will add some code to rollback on failure 
-      # - destroy-environment   
-      # - revert-migrations 
+      - destroy-environment   
+      - revert-migrations 
 
   smoke-test:
     docker:
@@ -387,7 +387,7 @@ jobs:
           command: |
             # your code here 
             # Check the status of the bckend url 
-            curl -s $API_URL/api/status
+            echo ` curl -s $API_URL/api/status`
             if curl -s $API_URL/api/status | grep "ok"
             then 
                exit 0
@@ -418,8 +418,8 @@ jobs:
             fi 
 
       # Here's where you will add some code to rollback on failure 
-      - destroy-environment   
-      - revert-migrations 
+      # - destroy-environment   
+      # - revert-migrations 
 
   cloudfront-update:
     docker:

@@ -40,6 +40,10 @@
 # install pm2 
 - name: "run code"
   ansible.builtin.shell: cd /home/ubuntu/ && pm2 start dist/main.js
+  # ansible.builtin.command: cd /home/ubuntu/ && pm2 start dist/main.js
+  #  && doesn't exists in the command 
+  # https://linuxhint.com/shell-vs-command-modules-ansible/#:~:text=The%20shell%20module%20executes%20commands,executes%20on%20all%20selected%20nodes.
+
   # args:
   #   chdir: /home/ubuntu/dist
   register: pm2_logs

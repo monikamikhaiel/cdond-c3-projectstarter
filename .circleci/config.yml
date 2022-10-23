@@ -387,6 +387,7 @@ jobs:
           command: |
             # your code here 
             # Check the status of the bckend url 
+            curl -s $API_URL/api/status
             if curl -s $API_URL/api/status | grep "ok"
             then 
                exit 0
@@ -408,6 +409,7 @@ jobs:
           command: |
             # your code here
             Frontend_url=http://udapeople-${CIRCLE_WORKFLOW_ID:0:5}.s3-website.us-west-1.amazonaws.com
+            curl -s $Frontend_url
             if curl -s $Frontend_url | grep "Welcome"
             then 
                exit 0

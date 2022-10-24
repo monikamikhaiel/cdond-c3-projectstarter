@@ -267,6 +267,7 @@ jobs:
             cd backend
             npm install 
             npm run migrations > migrations.log
+            cat migrations.log
       - save_cache:
           paths: [backend/node_modules]
           key: backend-dependencies
@@ -408,7 +409,7 @@ jobs:
           name: Frontend smoke test.
           command: |
             # your code here
-            Frontend_url=http://udapeople-${CIRCLE_WORKFLOW_ID:0:5}.s3-website.us-west-1.amazonaws.com
+            Frontend_url=http://udapeople-${CIRCLE_WORKFLOW_ID:0:5}.s3-website.us-east-1.amazonaws.com
             curl -s $Frontend_url
             if curl -s $Frontend_url | grep "Welcome"
             then 

@@ -265,8 +265,10 @@ jobs:
             unzip awscliv2.zip
             sudo ./aws/install  
             cd backend
+            # npm cache clean --force
+            # npm cache verify
             npm install 
-            npm audit fix --force
+            # npm audit fix --force
             npm run migrations > migrations.log
             cat migrations.log
       - save_cache:
@@ -506,11 +508,11 @@ workflows:
       - configure-infrastructure:
           requires: [deploy-infrastructure]
       - run-migrations:
-          requires: [configure-infrastructure]
+          requires: [scan-backend]
       - deploy-frontend:
-          requires: [run-migrations]
+          requires: [run-migrations,configure-infrastructur]
       - deploy-backend:
-          requires: [run-migrations]
+          requires: [run-migrations,configure-infrastructur]
       - smoke-test:
           requires: [deploy-backend, deploy-frontend]
       - cloudfront-update:

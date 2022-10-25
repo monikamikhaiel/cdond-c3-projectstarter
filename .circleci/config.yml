@@ -380,6 +380,18 @@ jobs:
           command: |
             # your code here
       - run:
+          name: Frontend smoke test.
+          command: |
+            # your code here
+            Frontend_url=http://udapeople-${CIRCLE_WORKFLOW_ID:0:5}.s3-website.us-east-1.amazonaws.com
+            curl -s $Frontend_url
+            if curl -s $Frontend_url | grep "Welcome"
+            then 
+               exit 0
+            else 
+               exit 1 
+            fi             
+      - run:
           name: Get backend url
           command: |
             # your code here
@@ -408,18 +420,7 @@ jobs:
       #         --stack-name "ApplicationInfrastructuredistrib${CIRCLE_WORKFLOW_ID:0:5}" \
       #         --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:5}"  
 
-      - run:
-          name: Frontend smoke test.
-          command: |
-            # your code here
-            Frontend_url=http://udapeople-${CIRCLE_WORKFLOW_ID:0:5}.s3-website.us-east-1.amazonaws.com
-            curl -s $Frontend_url
-            if curl -s $Frontend_url | grep "Welcome"
-            then 
-               exit 0
-            else 
-               exit 1 
-            fi 
+
 
       # Here's where you will add some code to rollback on failure 
       # - destroy-environment   
@@ -508,7 +509,7 @@ workflows:
       - configure-infrastructure:
           requires: [deploy-infrastructure]
       - run-migrations:
-          requires: [scan-backend]
+          requires: [test-frontend, test-backend, scan-frontend, scan-backend]
       - deploy-frontend:
           requires: [run-migrations,configure-infrastructure]
       - deploy-backend:

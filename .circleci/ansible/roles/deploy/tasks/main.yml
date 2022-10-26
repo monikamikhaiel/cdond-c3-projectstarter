@@ -40,7 +40,7 @@
 # install pm2 
 - name: "run code"
   shell: | 
-          pm2 start /home/ubuntu/dist/main.js
+          pm2 start dist/main.js
 
   # ansible.builtin.command: pm2 start dist/main.js
   # # ansible.builtin.command: cd /home/ubuntu/ && pm2 start dist/main.js
@@ -49,11 +49,11 @@
 
   args:
     chdir: /home/ubuntu
-  register: pm2_logs
-- name: copy the output to a local file
-  copy:
-    content: "{{ pm2_logs.stdout }}"
-    dest: "/tmp/hello.txt"
-  delegate_to: localhost    
+#   register: pm2_logs
+# - name: copy the output to a local file
+#   copy:
+#     content: "{{ pm2_logs.stdout }}"
+#     dest: "/tmp/hello.txt"
+#   delegate_to: localhost    
 
 

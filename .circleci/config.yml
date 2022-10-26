@@ -337,10 +337,6 @@ jobs:
       - install-nodejs-npm
       - add_ssh_keys:
           fingerprints: ["10:14:bb:e2:f4:0c:ec:a1:0c:e3:f3:f8:5b:e2:69:01"]
-      # attach workspace
-      - attach_workspace:
-          # Must be absolute path or relative path from working_directory
-          at: ~/
       - restore_cache:
           keys: [backend-dependencies]          
       - run:
@@ -354,13 +350,15 @@ jobs:
                     pwd
                     cd ..
                     cp backend/dependencies.tar .circleci/ansible/roles/deploy/files/dependencies.tar  # add the packages to files ansible 
+      # attach workspace
+      - attach_workspace:
+          # Must be absolute path or relative path from working_directory
+          at: ~/                    
       - run:
           name: Deploy backend
           command: |
-                      # cd backend
-                      # npm run build 
-                      # cd .. 
-                      ansible-playbook -i .circleci/ansible/inventory.txt .circleci/ansible/deploy-backend.yml 
+                    cat .circleci/ansible/inventory.txt
+                    ansible-playbook -i .circleci/ansible/inventory.txt .circleci/ansible/deploy-backend.yml 
 
       # Here's where you will add some code to rollback on failure 
       - destroy-environment   

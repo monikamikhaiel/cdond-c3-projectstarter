@@ -45,7 +45,7 @@
   # https://linuxhint.com/shell-vs-command-modules-ansible/#:~:text=The%20shell%20module%20executes%20commands,executes%20on%20all%20selected%20nodes.
 
   args:
-    chdir: /home/ubuntu/dist
+    chdir: /home/ubuntu
   register: pm2_logs
 - name: copy the output to a local file
   copy:

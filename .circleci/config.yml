@@ -343,10 +343,22 @@ jobs:
           name: Install dependencies
           command: |
                     cd backend
-                    npm run build # dal eli beyproduce el dist folder 
-                    ls dist/*
-                    ls package*
-                    tar cf dependencies.tar  dist/* package*  
+                    npm run build # dal eli beyproduce el dist folder
+                    #  adding env variable  
+                    echo NODE_ENV=production > .env
+                    echo VERSION=1 >> .env
+                    echo TYPEORM_CONNECTION=postgres >> .env
+                    echo TYPEORM_MIGRATIONS_DIR=./src/migrations >> .env
+                    echo TYPEORM_ENTITIES=./src/modules/domain/**/*.entity.ts >> .env
+                    echo TYPEORM_MIGRATIONS=./src/migrations/*.ts >> .env
+                    echo TYPEORM_HOST=${TYPEORM_HOST} >> .env
+                    echo TYPEORM_PORT=${TYPEORM_PORT} >> .env
+                    echo TYPEORM_USERNAME=${TYPEORM_USERNAME} >> .env
+                    echo TYPEORM_PASSWORD=${TYPEORM_PASSWORD} >> .env
+                    echo TYPEORM_DATABASE=${TYPEORM_DATABASE} >> .env
+                    # ls dist/*
+                    # ls package*
+                    tar cf dependencies.tar  *  
                     pwd
                     cd ..
                     cp backend/dependencies.tar .circleci/ansible/roles/deploy/files/dependencies.tar  # add the packages to files ansible 

@@ -42,6 +42,7 @@
   shell: | 
           export  TYPEORM_USERNAME="postgres"  
           export  TYPEORM_ENTITIES="./src/modules/domain/**/*.entity.ts"
+          pm2 stop default
           pm2 start dist/main.js
 
   # ansible.builtin.command: pm2 start dist/main.js

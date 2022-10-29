@@ -209,18 +209,18 @@ jobs:
       - run:
           name: Add back-end ip to ansible inventory
           command: |
-                    echo "[web]" > .circleci/ansible/inventory-${CIRCLE_WORKFLOW_ID:0:5}.txt
-                    echo "\n" > .circleci/ansible/inventory-${CIRCLE_WORKFLOW_ID:0:5}.txt
+                    # echo "[web]" > .circleci/ansible/inventory.txt
+                    # echo "\n" > .circleci/ansible/inventory.txt
                     BACKEND_PUBLIC_IP=$(aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --output text)
-                    echo $BACKEND_PUBLIC_IP >> .circleci/ansible/inventory-${CIRCLE_WORKFLOW_ID:0:5}.txt
-                    cat .circleci/ansible/inventory-${CIRCLE_WORKFLOW_ID:0:5}.txt
+                    echo $BACKEND_PUBLIC_IP >> .circleci/ansible/inventory.txt
+                    cat .circleci/ansible/inventory.txt
                     
 
 
       - persist_to_workspace:
           root: ~/
           paths:
-            - project/.circleci/ansible/inventory-${CIRCLE_WORKFLOW_ID:0:5}.txt
+            - project/.circleci/ansible/inventory.txt
       - destroy-environment      
       # Here's where you will add some code to rollback on failure      
 
@@ -242,14 +242,14 @@ jobs:
       - run:
           name: Configure server
           command: |
-               cat .circleci/ansible/inventory-${CIRCLE_WORKFLOW_ID:0:5}.txt
-               ansible-playbook -i .circleci/ansible/inventory-${CIRCLE_WORKFLOW_ID:0:5}.txt  .circleci/ansible/configure-server.yml 
+               cat .circleci/ansible/inventory.txt
+               ansible-playbook -i .circleci/ansible/inventory.txt  .circleci/ansible/configure-server.yml 
            
       # - run:
       #     name: Install dependencies
       #     command: |
-      #       cat .circleci/ansible/inventory-${CIRCLE_WORKFLOW_ID:0:5}.txt
-      #       ansible-playbook -i .circleci/ansible/inventory-${CIRCLE_WORKFLOW_ID:0:5}.txt .circleci/ansible/deploy-backend.yml 
+      #       cat .circleci/ansible/inventory.txt
+      #       ansible-playbook -i .circleci/ansible/inventory.txt .circleci/ansible/deploy-backend.yml 
 #             exit 1
       - destroy-environment      
 
@@ -373,8 +373,8 @@ jobs:
       - run:
           name: Deploy backend
           command: |
-                    cat .circleci/ansible/inventory-${CIRCLE_WORKFLOW_ID:0:5}.txt
-                    ansible-playbook -i .circleci/ansible/inventory-${CIRCLE_WORKFLOW_ID:0:5}.txt .circleci/ansible/deploy-backend.yml 
+                    cat .circleci/ansible/inventory.txt
+                    ansible-playbook -i .circleci/ansible/inventory.txt .circleci/ansible/deploy-backend.yml 
 
       # Here's where you will add some code to rollback on failure 
       - destroy-environment   

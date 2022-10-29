@@ -212,6 +212,9 @@ jobs:
                     BACKEND_PUBLIC_IP=$(aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --output text)
                     echo $BACKEND_PUBLIC_IP >> .circleci/ansible/inventory-${CIRCLE_WORKFLOW_ID:0:5}.txt
                     cat .circleci/ansible/inventory-${CIRCLE_WORKFLOW_ID:0:5}.txt
+                    echo "[web]" > project/.circleci/ansible/inventory-${CIRCLE_WORKFLOW_ID:0:5}.txt
+                    echo "\n" > project/.circleci/ansible/inventory-${CIRCLE_WORKFLOW_ID:0:5}.txt
+
 
       - persist_to_workspace:
           root: ~/

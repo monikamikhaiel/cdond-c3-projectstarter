@@ -418,6 +418,9 @@ jobs:
           name: Backend smoke test.
           command: |
             # your code here 
+            BACKEND_IP=$(aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --output text)
+            # echo "Backend EC2 IP is ${BACKEND_IP}"
+            export API_URL="http://${BACKEND_IP}:3030"
             # Check the status of the bckend url
             echo " $API_URL/api/status" 
             echo ` curl -s $API_URL/api/status`
@@ -440,8 +443,8 @@ jobs:
 
 
       # Here's where you will add some code to rollback on failure 
-      # - destroy-environment   
-      # - revert-migrations 
+      - destroy-environment   
+      - revert-migrations 
 
   cloudfront-update:
     docker:

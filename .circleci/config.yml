@@ -362,10 +362,11 @@ jobs:
                     echo TYPEORM_DATABASE=${TYPEORM_DATABASE} >> .env
                     # ls dist/*
                     # ls package*
-                    tar cf dependencies.tar  *  
+                    # tar cf dependencies.tar backend 
                     pwd
                     cd ..
-                    cp backend/dependencies.tar .circleci/ansible/roles/deploy/files/dependencies.tar  # add the packages to files ansible 
+                    tar cf dependencies.tar backend 
+                    cp dependencies.tar .circleci/ansible/roles/deploy/files/dependencies.tar  # add the packages to files ansible 
       # attach workspace
       - attach_workspace:
           # Must be absolute path or relative path from working_directory

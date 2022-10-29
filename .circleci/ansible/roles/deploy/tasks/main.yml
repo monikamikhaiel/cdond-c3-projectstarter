@@ -43,7 +43,7 @@
           export  TYPEORM_USERNAME="postgres"  
           export  TYPEORM_ENTITIES="./src/modules/domain/**/*.entity.ts"
           pm2 stop default
-          pm2 start dist/main.js
+          pm2 start main.js
 
   # ansible.builtin.command: pm2 start dist/main.js
   # # ansible.builtin.command: cd /home/ubuntu/ && pm2 start dist/main.js
@@ -51,7 +51,7 @@
   # # https://linuxhint.com/shell-vs-command-modules-ansible/#:~:text=The%20shell%20module%20executes%20commands,executes%20on%20all%20selected%20nodes.
 
   args:
-    chdir: /home/ubuntu
+    chdir: /home/ubuntu/dist
   environment:
     TYPEORM_CONNECTION: "postgres"
     TYPEORM_DATABASE: "{{ lookup('env', 'TYPEORM_DATABASE')}}"

@@ -52,6 +52,7 @@
 
   args:
     chdir: /home/ubuntu/dist
+    
   environment:
     TYPEORM_CONNECTION: "postgres"
     TYPEORM_DATABASE: "{{ lookup('env', 'TYPEORM_DATABASE')}}"

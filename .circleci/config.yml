@@ -492,14 +492,15 @@ jobs:
             export OldWorkflowID=$(curl -k  https://kvdb.io/K33QBbPMsWuLqHyKSuNPRx/old_workflow_id)
             echo "Value of old workflowID $OldWorkflowID" 
             # export STACKS=[] #put the list of stacks here
-            export STACKS=$(aws cloudformation list-stacks \
+            export STACKS=($(aws cloudformation list-stacks \
              --query "StackSummaries[*].StackName" \
-             --stack-status-filter CREATE_COMPLETE  --no-paginate --output text)
+             --stack-status-filter CREATE_COMPLETE  --no-paginate --output text))
+             echo $STACKS
 
       - run:
           name: Remove old stacks and files
           command: |
-            if [[ "${STACKS[@]}" =~ "${OldWorkflowID}" ]]
+            if [[ "${STACKS[@]}" =~ "${OldWorkflowID}" && ${OldWorkflowID} !="" ]]
             then
             # same commands as the cmd -->    destroy-environment:
              aws cloudformation delete-stack --stack-name "ApplicationInfrastructureBACK${OldWorkflowID}"
@@ -507,7 +508,7 @@ jobs:
              aws cloudformation delete-stack --stack-name "ApplicationInfrastructureFRONT${OldWorkflowID}"  
             fi
             
-            
+
 workflows:
   default:
     jobs:

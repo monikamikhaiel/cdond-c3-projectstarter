@@ -477,7 +477,7 @@ jobs:
             aws cloudformation deploy \
               --template-file .circleci/files/cloudfront.yml \
               --tags project=monika-infrastructure-deployment \
-              --stack-name "ApplicationInfrastructuredistrib${CIRCLE_WORKFLOW_ID:0:5}" \
+              --stack-name "ApplicationInfrastructuredistrib" \
               --parameter-overrides WorkflowID="${CIRCLE_WORKFLOW_ID:0:5}"  
               
       - destroy-environment   

@@ -325,6 +325,9 @@ jobs:
             # echo "Backend EC2 IP is ${BACKEND_IP}"
             export API_URL="http://${BACKEND_IP}:3030"
             echo "${API_URL}"
+            echo "API_URL=http://$BACKEND_PUBLIC_IP:3030" > frontend/.env
+            cat frontend/.env
+            export API_URL="http://$BACKEND_PUBLIC_IP:3030"
       - run:
           name: Deploy frontend objects
           command: |

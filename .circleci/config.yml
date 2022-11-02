@@ -425,7 +425,7 @@ jobs:
           name: Backend smoke test.
           command: |
             # your code here 
-            BACKEND_IP=$(aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --output text)
+            BACKEND_IP=$(aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:5}" --output text)
             # echo "Backend EC2 IP is ${BACKEND_IP}"
             export API_URL="http://${BACKEND_IP}:3030"
             # Check the status of the bckend url

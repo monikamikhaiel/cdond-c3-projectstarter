@@ -39,12 +39,12 @@ commands:
              aws cloudformation delete-stack --stack-name "ApplicationInfrastructureBACK${CIRCLE_WORKFLOW_ID:0:5}"
              aws s3 rm s3://udapeople-${CIRCLE_WORKFLOW_ID:0:5} --recursive
              aws cloudformation delete-stack --stack-name "ApplicationInfrastructureFRONT${CIRCLE_WORKFLOW_ID:0:5}"  
-      #        echo "[web]" > .circleci/ansible/inventory.txt
-      #        cat .circleci/ansible/inventory.txt
+      #        echo "[web]" > .circleci/ansible/inventory_${CIRCLE_WORKFLOW_ID:0:5}.txt
+      #        cat .circleci/ansible/inventory_${CIRCLE_WORKFLOW_ID:0:5}.txt
       # - persist_to_workspace:
       #     root: ~/
       #     paths:
-      #       - project/.circleci/ansible/inventory.txt
+      #       - project/.circleci/ansible/inventory_${CIRCLE_WORKFLOW_ID:0:5}.txt
 
    revert-migrations:
       description: Revert the last migration if successfully run in the current workflow.
@@ -215,19 +215,19 @@ jobs:
       - run:
           name: Add back-end ip to ansible inventory
           command: |
-                    echo "[web]" > .circleci/ansible/inventory.txt
-                    # echo "\n" > .circleci/ansible/inventory.txt
+                    echo "[web]" > .circleci/ansible/inventory_${CIRCLE_WORKFLOW_ID:0:5}.txt
+                    # echo "\n" > .circleci/ansible/inventory_${CIRCLE_WORKFLOW_ID:0:5}.txt
                     BACKEND_PUBLIC_IP=$(aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --output text)
-                    echo $BACKEND_PUBLIC_IP >> .circleci/ansible/inventory.txt
-                    cat .circleci/ansible/inventory.txt
+                    echo $BACKEND_PUBLIC_IP >> .circleci/ansible/inventory_${CIRCLE_WORKFLOW_ID:0:5}.txt
+                    cat .circleci/ansible/inventory_${CIRCLE_WORKFLOW_ID:0:5}.txt
 
       - persist_to_workspace:
       #     root: ~/
       #     paths:
-      #       - project/.circleci/ansible/inventory.txt
+      #       - project/.circleci/ansible/inventory_${CIRCLE_WORKFLOW_ID:0:5}.txt
           root: ~/
           paths:
-            - project/.circleci/ansible/inventory.txt
+            - project/.circleci/ansible/inventory_${CIRCLE_WORKFLOW_ID:0:5}.txt
       - destroy-environment      
       # Here's where you will add some code to rollback on failure      
 
@@ -249,14 +249,14 @@ jobs:
       - run:
           name: Configure server
           command: |
-               cat .circleci/ansible/inventory.txt
-               ansible-playbook -i .circleci/ansible/inventory.txt  .circleci/ansible/configure-server.yml 
+               cat .circleci/ansible/inventory_${CIRCLE_WORKFLOW_ID:0:5}.txt
+               ansible-playbook -i .circleci/ansible/inventory_${CIRCLE_WORKFLOW_ID:0:5}.txt  .circleci/ansible/configure-server.yml 
            
       # - run:
       #     name: Install dependencies
       #     command: |
-      #       cat .circleci/ansible/inventory.txt
-      #       ansible-playbook -i .circleci/ansible/inventory.txt .circleci/ansible/deploy-backend.yml 
+      #       cat .circleci/ansible/inventory_${CIRCLE_WORKFLOW_ID:0:5}.txt
+      #       ansible-playbook -i .circleci/ansible/inventory_${CIRCLE_WORKFLOW_ID:0:5}.txt .circleci/ansible/deploy-backend.yml 
 #             exit 1
       - destroy-environment      
 
@@ -381,8 +381,8 @@ jobs:
       - run:
           name: Deploy backend
           command: |
-                    cat .circleci/ansible/inventory.txt
-                    ansible-playbook -i .circleci/ansible/inventory.txt .circleci/ansible/deploy-backend.yml 
+                    cat .circleci/ansible/inventory_${CIRCLE_WORKFLOW_ID:0:5}.txt
+                    ansible-playbook -i .circleci/ansible/inventory_${CIRCLE_WORKFLOW_ID:0:5}.txt .circleci/ansible/deploy-backend.yml 
 
       # Here's where you will add some code to rollback on failure 
       - destroy-environment   

@@ -507,7 +507,8 @@ jobs:
       - run:
           name: Remove old stacks and files
           command: |
-            if [[ "${STACKS[@]}" =~ "${OldWorkflowID}" ]]
+            # if [[ "${STACKS[@]}" =~ "${OldWorkflowID}" ]]
+            if [[ "${CIRCLE_WORKFLOW_ID:0:5}" =~ "${OldWorkflowID}" ]]
             then
             # same commands as the cmd -->    destroy-environment:
              aws cloudformation delete-stack --stack-name "ApplicationInfrastructureBACK${OldWorkflowID}"

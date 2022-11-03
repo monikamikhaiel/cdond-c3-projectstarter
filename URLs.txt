@@ -1,5 +1,5 @@
 URL01:  https://github.com/monikamikhaiel/cdond-c3-projectstarter
  [URL02] http://udapeople-325b3.s3-website.us-east-1.amazonaws.com
- [URL05] prometheus--> http://23.23.45.45/:9090/targets
-[URL04] backend EIP: http://3.83.161.12:3030/api/status
+ [URL05] prometheus--> http://23.23.45.45:9090/targets
+[URL04] backend EIP: http://54.242.239.40:3030/api/status
 
